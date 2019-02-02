@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="commons (2)">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/tictactoe-springboot/src/main/resources/lib/commons.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -11,6 +11,6 @@ import be.leerstad.tictactoe.business.Player;
 public interface GameRepository extends JpaRepository<Game, Integer> {
 
 	List<Game> findByDateTime(LocalDateTime dateTime);
-	List<Game> findByPlayer1Name(String name);
-	List<Game> findByPlayer2Name(String name);
+	List<Game> findByPlayer1(String name);
+	List<Game> findByPlayer2(String name);
 }

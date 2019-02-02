@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 import be.leerstad.tictactoe.business.Player;
 import be.leerstad.tictactoe.service.dto.PlayerDTO;
 import commons.service.AbstractMapper;
-@Component
+import org.springframework.stereotype.Controller;
+
+@Controller
 public class PlayerMapper extends AbstractMapper<Player, PlayerDTO> {
 	
 

@@ -27,6 +27,7 @@ public class GameBoard extends GridLayout implements Observer {
 	
 	public void init() {
 		generateMatrixGrid(ROWS,COLUMNS );
+		setMargin(true);
 	}
 	
 	 private void generateMatrixGrid(final int rows, final int columns) {

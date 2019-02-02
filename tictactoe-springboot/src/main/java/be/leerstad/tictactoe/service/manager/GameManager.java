@@ -1,14 +1,18 @@
 package be.leerstad.tictactoe.service.manager;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.ThreadLocalRandom;
 
+import be.leerstad.tictactoe.business.Game;
+import be.leerstad.tictactoe.service.dto.GameDTO;
+import be.leerstad.tictactoe.service.manager.mapper.GameMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import be.leerstad.tictactoe.business.Board;
-import be.leerstad.tictactoe.business.Game;
+
 import be.leerstad.tictactoe.business.GameState;
 import be.leerstad.tictactoe.business.Seed;
 import be.leerstad.tictactoe.business.repo.GameRepository;
@@ -26,6 +30,8 @@ public class GameManager extends Observable {
 	private PlayerDTO player2;
 	@Autowired
 	private PlayerMapper playerMapper;
+	@Autowired
+	private GameMapper gameMapper;
 	@Autowired
 	private GameRepository gameRepository;
 	
@@ -163,9 +169,15 @@ public class GameManager extends Observable {
 		currentState = GameState.PLAYING; // ready to play
 	}
 	
-	public void saveGame() {
-		Game g = new Game(playerMapper.mapToObj(player1), playerMapper.mapToObj(player2), LocalDateTime.now());
-		g = gameRepository.save(g);
+	public boolean saveGame() {
+		if(currentState!=GameState.PLAYING) {
+			Game g = new Game(playerMapper.mapToObj(player1), playerMapper.mapToObj(player2), LocalDateTime.now());
+			g = gameRepository.save(g);
+			resetScore();
+			newGame();
+			return true;
+		}
+		return false;
 	}
 
 
@@ -178,6 +190,8 @@ public class GameManager extends Observable {
 		return player2;
 	}
 	
-	
+	public List<GameDTO> getRanking(){
+	return gameMapper.mapToDTO(gameRepository.findAll());
+	}
 
 }

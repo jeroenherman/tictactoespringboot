@@ -4,6 +4,7 @@ import com.vaadin.ui.MenuBar;
 
 import be.leerstad.tictactoe.service.dto.GameMode;
 import be.leerstad.tictactoe.service.manager.GameManager;
+import com.vaadin.ui.Notification;
 
 public class GameMenu extends MenuBar {
 
@@ -16,7 +17,12 @@ public class GameMenu extends MenuBar {
 	private final Command singlePlayer = s -> gameManager.setGameMode(GameMode.SINGLE);
 	private final Command dualPlayer = s -> gameManager.setGameMode(GameMode.DUAL);
 	private Command options = s -> this.getUI().setContent(new OptionsPanel(gameManager));
-	private Command save = s-> gameManager.saveGame();
+	private Command save = s-> {
+		if(gameManager.saveGame())
+			Notification.show("Game Saved");
+		else
+			Notification.show("Game is still playing","please finish it first before saving", Notification.Type.ERROR_MESSAGE);
+	};
 
 	public GameMenu(GameManager gameManager) {
 		super();
