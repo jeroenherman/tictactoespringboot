@@ -34,6 +34,8 @@ private void init() {
 	else
 	player2 = new TextField("Player 2", "speler 2");
 	gameMode = new ComboBox<GameMode>("Game Mode");
+	gameMode.setEmptySelectionAllowed(false);
+	gameMode.setValue(gameManager.getGameMode());
 	gameMode.setItems(GameMode.values());
 	gameMode.addValueChangeListener(new GameModeListener(this,gameManager));
 	addComponents(player1,player2,gameMode);

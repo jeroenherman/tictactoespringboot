@@ -14,8 +14,6 @@ public class GameMenu extends MenuBar {
 	private static final long serialVersionUID = -6583543972904254710L;
 	private GameManager gameManager;
 	private final Command newGame = s -> gameManager.newGame();
-	private final Command singlePlayer = s -> gameManager.setGameMode(GameMode.SINGLE);
-	private final Command dualPlayer = s -> gameManager.setGameMode(GameMode.DUAL);
 	private Command options = s -> this.getUI().setContent(new OptionsPanel(gameManager));
 	private Command save = s-> {
 		if(gameManager.saveGame())
@@ -31,11 +29,8 @@ public class GameMenu extends MenuBar {
 	}
 	
 	private void init() {
-		MenuItem mode = addItem("Mode");
-		mode.addItem("Single Player", singlePlayer);
-		mode.addItem("Dual Player", dualPlayer);
-		MenuItem reset = addItem("New Game",newGame);
 		MenuItem gameOptions = addItem("Game Options" ,options);
+		MenuItem reset = addItem("New Game",newGame);
 		MenuItem saveGame = addItem("Save Game", save );
 	}
 

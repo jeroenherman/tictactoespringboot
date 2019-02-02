@@ -8,9 +8,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
 
 import be.leerstad.tictactoe.business.GameState;
 import be.leerstad.tictactoe.service.manager.GameManager;
@@ -39,13 +37,28 @@ public class TicTacToeUI extends UI implements Observer{
 		
 	}
 	private void newGame() {
-		   GridLayout root = new GridLayout(3,3);
-		   root.setMargin(true);
-		   root.setMargin(new MarginInfo(false,true,true,false));
-	        root.addComponent(new GameMenu(gameManager),0,0);
-	        root.addComponent(new GameBoard(gameManager),0,1);
-	        root.addComponent(new InfoPanel(gameManager),0,2);
-	        root.addComponent(new Ranking(gameManager),1,1);
+		VerticalLayout root = new VerticalLayout();
+		root.addComponent(new GameMenu(gameManager));
+		HorizontalLayout hlayout = new HorizontalLayout();
+		Panel leftPanel = new Panel("Game Board");
+		HorizontalLayout gameLayout = new HorizontalLayout();
+		gameLayout.setMargin(true);
+		gameLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+		gameLayout.addComponents(new GameBoard(gameManager),new InfoPanel(gameManager));
+		leftPanel.setContent(gameLayout);
+		Panel rightPanel = new Panel("Rankings");
+		rightPanel.setContent(new Ranking(gameManager));
+		hlayout.addComponentsAndExpand(leftPanel,rightPanel);
+    	root.addComponent(hlayout);
+
+//		   GridLayout root = new GridLayout(3,3);
+//		   root.setMargin(true);
+//		   root.setMargin(new MarginInfo(false,true,true,false));
+//	        root.addComponent(new GameMenu(gameManager),0,0);
+//	        root.
+//	        root.addComponents(new Label("Tic Tac Toe"),new GameBoard(gameManager),0,1);
+//	        root.addComponent(new InfoPanel(gameManager),0,2);
+//	        root.addComponent(new Ranking(gameManager),1,1);
 	        setContent(root);
 	}
 

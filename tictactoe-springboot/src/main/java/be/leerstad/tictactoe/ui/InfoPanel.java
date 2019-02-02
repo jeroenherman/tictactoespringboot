@@ -11,6 +11,7 @@ import com.vaadin.ui.VerticalLayout;
 import be.leerstad.tictactoe.business.GameState;
 import be.leerstad.tictactoe.service.dto.PlayerDTO;
 import be.leerstad.tictactoe.service.manager.GameManager;
+import com.vaadin.ui.themes.ValoTheme;
 
 public class InfoPanel extends Panel implements Observer {
 
@@ -28,7 +29,8 @@ public class InfoPanel extends Panel implements Observer {
 
 	private void init() {
 		// this.setCaption("Info Panel");
-		this.setWidth(300, Unit.PIXELS);
+		setSizeFull();
+		addStyleName(ValoTheme.LABEL_BOLD);
 		final VerticalLayout layout = new VerticalLayout();
 		layout.setWidth(300, Unit.PIXELS);
 		layout.setSpacing(false);

@@ -3,6 +3,7 @@ package be.leerstad.tictactoe.service.manager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Observable;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import be.leerstad.tictactoe.business.Game;
@@ -28,6 +29,8 @@ public class GameManager extends Observable {
 	private PlayerDTO currentPlayer; // the current player (with enum Seed)
 	private PlayerDTO player1;
 	private PlayerDTO player2;
+	@Autowired
+	private Game game;
 	@Autowired
 	private PlayerMapper playerMapper;
 	@Autowired
@@ -171,8 +174,15 @@ public class GameManager extends Observable {
 	
 	public boolean saveGame() {
 		if(currentState!=GameState.PLAYING) {
-			Game g = new Game(playerMapper.mapToObj(player1), playerMapper.mapToObj(player2), LocalDateTime.now());
-			g = gameRepository.save(g);
+			Optional optional = gameRepository.findById(Integer.valueOf(game.getId()));
+			if (optional.isPresent()) {
+				game = (Game) optional.get();
+				game.getScore().setScoreX(game.getScore().getScoreX()+player1.getScore());
+				game.getScore().setScoreO(game.getScore().getScoreO()+player2.getScore());
+			}
+			else
+			game = new Game(playerMapper.mapToObj(player1), playerMapper.mapToObj(player2), LocalDateTime.now());
+			game = gameRepository.save(game);
 			resetScore();
 			newGame();
 			return true;
