@@ -28,15 +28,20 @@ public class InfoPanel extends Panel implements Observer {
 	}
 
 	private void init() {
-		// this.setCaption("Info Panel");
+		 this.setCaption("Info Panel");
 		setSizeFull();
 		addStyleName(ValoTheme.LABEL_BOLD);
 		final VerticalLayout layout = new VerticalLayout();
 		layout.setWidth(300, Unit.PIXELS);
 		layout.setSpacing(false);
+//		Label title = new Label("Info Panel");
+//		title.addStyleName(ValoTheme.LABEL_COLORED);
+//		layout.addComponent(title);
 		if (gameManager.getCurrentState().equals(GameState.PLAYING))
-			layout.addComponent(new Label(gameManager.getCurrentPlayer().toString()));
-		layout.addComponent(new Label(gameManager.getGameMode().toString()));
+			layout.addComponent(new Label("Current player is: "+gameManager.getCurrentPlayer().toString()));
+		else
+			layout.addComponent(new Label("Please restart Game"));
+		layout.addComponent(new Label("Game Mode: "+gameManager.getGameMode().toString()));
 		layout.addComponent(new Label(gameManager.getCurrentState().toString()));
 		layout.addComponent(setScore(gameManager.getPlayer1()));
 		layout.addComponent(setScore(gameManager.getPlayer2()));
@@ -51,7 +56,7 @@ public class InfoPanel extends Panel implements Observer {
 
 	private Component setScore(PlayerDTO player) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Current Score : ").append(player.getName()).append(" is ").append(player.getScore());
+		sb.append("Score : ").append(player.getName()).append(" : ").append(player.getScore());
 			return new Label (sb.toString());
 	}
 

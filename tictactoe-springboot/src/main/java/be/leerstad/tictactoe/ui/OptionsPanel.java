@@ -3,9 +3,7 @@ package be.leerstad.tictactoe.ui;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 
 import be.leerstad.tictactoe.service.dto.GameMode;
 import be.leerstad.tictactoe.service.manager.GameManager;
@@ -38,7 +36,14 @@ private void init() {
 	gameMode.setValue(gameManager.getGameMode());
 	gameMode.setItems(GameMode.values());
 	gameMode.addValueChangeListener(new GameModeListener(this,gameManager));
-	addComponents(player1,player2,gameMode);
+	Button start = new Button("Start",event -> {
+		if (gameMode.getValue()!=null)
+			gameManager.newGame();
+		else
+			Notification.show("Please select a game mode");
+	});
+	addComponents(player1,player2,gameMode,start);
+
 }
 
 @Override
@@ -71,7 +76,6 @@ public void setGameMode(ComboBox<GameMode> gameMode) {
 	this.gameMode = gameMode;
 }
 
-
-
-
 }
+
+

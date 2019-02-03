@@ -88,7 +88,12 @@ public class GameManager extends Observable {
 		this.player1 = p1;
 		player1.setSeed(Seed.CROSS);
 		this.player2 = p2;
-		player2.setSeed(Seed.NOUGHT);	
+		player2.setSeed(Seed.NOUGHT);
+		game = gameRepository.findGameByPlayer1AndAndPlayer2(p1.getName(),p2.getName());
+		if (game==null){
+			game = new Game();
+		}
+
 	}
 
 	private void resetScore() {
@@ -166,7 +171,6 @@ public class GameManager extends Observable {
 	public void newGame() {
 		board.init(); // clear the board contents
 		setChanged();
-		currentGameMode = currentGameMode;
 		notifyObservers(GameState.RESET);
 		currentPlayer = player1; // CROSS plays first
 		currentState = GameState.PLAYING; // ready to play
@@ -179,6 +183,7 @@ public class GameManager extends Observable {
 				game = (Game) optional.get();
 				game.getScore().setScoreX(game.getScore().getScoreX()+player1.getScore());
 				game.getScore().setScoreO(game.getScore().getScoreO()+player2.getScore());
+				game.setDateTime(LocalDateTime.now());
 			}
 			else
 			game = new Game(playerMapper.mapToObj(player1), playerMapper.mapToObj(player2), LocalDateTime.now());

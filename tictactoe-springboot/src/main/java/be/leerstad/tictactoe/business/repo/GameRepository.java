@@ -13,4 +13,5 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
 	List<Game> findByDateTime(LocalDateTime dateTime);
 	List<Game> findByPlayer1(String name);
 	List<Game> findByPlayer2(String name);
+	Game findGameByPlayer1AndAndPlayer2(String player1, String player2);
 }

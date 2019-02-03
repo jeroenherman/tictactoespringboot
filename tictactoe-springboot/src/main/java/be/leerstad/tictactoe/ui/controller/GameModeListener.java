@@ -3,7 +3,7 @@ package be.leerstad.tictactoe.ui.controller;
 import be.leerstad.tictactoe.service.dto.GameDTO;
 import com.vaadin.data.HasValue.ValueChangeEvent;
 import com.vaadin.data.HasValue.ValueChangeListener;
-import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.*;
 
 import be.leerstad.tictactoe.service.dto.GameMode;
 import be.leerstad.tictactoe.service.dto.PlayerDTO;
@@ -14,12 +14,9 @@ import org.springframework.stereotype.Controller;
 
 
 public class GameModeListener implements ValueChangeListener<GameMode> {
-	
+
 	private OptionsPanel optionsPanel;
 	private GameManager gameManager;
-
-	
-	
 
 	public GameModeListener(OptionsPanel optionsPanel, GameManager gameManager) {
 		super();
@@ -27,26 +24,21 @@ public class GameModeListener implements ValueChangeListener<GameMode> {
 		this.gameManager = gameManager;
 	}
 
-
-
 	@Override
 	public void valueChange(ValueChangeEvent<GameMode> event) {
-		 PlayerDTO player1 = new PlayerDTO(optionsPanel.getPlayer1().getValue());
-			PlayerDTO player2;
+		PlayerDTO player1 = new PlayerDTO(convertFirstCharToCapital(optionsPanel.getPlayer1().getValue()));
+		PlayerDTO player2;
 		if (optionsPanel.getGameMode().getValue().equals(GameMode.SINGLE))
-		 player2 = new PlayerDTO("Computer");
-		else 
-		 player2 = new PlayerDTO(optionsPanel.getPlayer2().getValue());
-		GameDTO game = new GameDTO();
-		game.setPlayer1(player1.getName());
-		game.setPlayer2(player2.getName());
-		game.setScore1(player1.getScore());
-		game.setScore2(player2.getScore());
-
-		gameManager.initGame(player1,player2, optionsPanel.getGameMode().getValue());
-
-
+			player2 = new PlayerDTO("Computer");
+		else
+			player2 = new PlayerDTO(convertFirstCharToCapital(optionsPanel.getPlayer2().getValue()));
+		gameManager.initGame(player1, player2, optionsPanel.getGameMode().getValue());
 
 	}
 
+	private String convertFirstCharToCapital(String string) {
+		string = string.toLowerCase();
+		String first = string.substring(0, 1).toUpperCase();
+		return first + string.substring(1);
+	}
 }
