@@ -1,15 +1,12 @@
 package be.leerstad.tictactoe.ui;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import com.vaadin.ui.*;
 
 import be.leerstad.tictactoe.service.dto.GameMode;
 import be.leerstad.tictactoe.service.manager.GameManager;
 import be.leerstad.tictactoe.ui.controller.GameModeListener;
 
-public class OptionsPanel extends FormLayout implements Observer {
+public class OptionsPanel extends FormLayout  {
 private GameManager gameManager;
 private TextField player1;
 private TextField player2;
@@ -46,34 +43,16 @@ private void init() {
 
 }
 
-@Override
-public void update(Observable o, Object arg) {
-	
-	
-}
-
 public TextField getPlayer1() {
 	return player1;
-}
-
-public void setPlayer1(TextField player1) {
-	this.player1 = player1;
 }
 
 public TextField getPlayer2() {
 	return player2;
 }
 
-public void setPlayer2(TextField player2) {
-	this.player2 = player2;
-}
-
 public ComboBox<GameMode> getGameMode() {
 	return gameMode;
-}
-
-public void setGameMode(ComboBox<GameMode> gameMode) {
-	this.gameMode = gameMode;
 }
 
 }

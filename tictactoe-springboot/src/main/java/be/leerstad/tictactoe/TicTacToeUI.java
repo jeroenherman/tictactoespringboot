@@ -22,10 +22,10 @@ public class TicTacToeUI extends UI implements Observer{
 	private GameManager gameManager;
 
     @Override
-    protected void init(VaadinRequest vaadinRequest) {
+	protected void init(VaadinRequest vaadinRequest) {
       gameManager.addObserver(this);
       GridLayout root = new GridLayout(3,3);
-	   root.setMargin(true);
+      root.setMargin(true);
       root.addComponent(new OptionsPanel(gameManager),1,1);
       setContent(root);
     }
@@ -50,16 +50,7 @@ public class TicTacToeUI extends UI implements Observer{
 		rightPanel.setContent(new Ranking(gameManager));
 		hlayout.addComponentsAndExpand(leftPanel,rightPanel);
     	root.addComponent(hlayout);
-
-//		   GridLayout root = new GridLayout(3,3);
-//		   root.setMargin(true);
-//		   root.setMargin(new MarginInfo(false,true,true,false));
-//	        root.addComponent(new GameMenu(gameManager),0,0);
-//	        root.
-//	        root.addComponents(new Label("Tic Tac Toe"),new GameBoard(gameManager),0,1);
-//	        root.addComponent(new InfoPanel(gameManager),0,2);
-//	        root.addComponent(new Ranking(gameManager),1,1);
-	        setContent(root);
+		setContent(root);
 	}
 
 }

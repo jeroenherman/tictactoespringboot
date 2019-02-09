@@ -24,6 +24,7 @@ public class InfoPanel extends Panel implements Observer {
 	public InfoPanel(GameManager gamemanager) {
 		this.gameManager = gamemanager;
 		gamemanager.addObserver(this);
+		init();
 
 	}
 
@@ -32,11 +33,8 @@ public class InfoPanel extends Panel implements Observer {
 		setSizeFull();
 		addStyleName(ValoTheme.LABEL_BOLD);
 		final VerticalLayout layout = new VerticalLayout();
-		layout.setWidth(300, Unit.PIXELS);
+
 		layout.setSpacing(false);
-//		Label title = new Label("Info Panel");
-//		title.addStyleName(ValoTheme.LABEL_COLORED);
-//		layout.addComponent(title);
 		if (gameManager.getCurrentState().equals(GameState.PLAYING))
 			layout.addComponent(new Label("Current player is: "+gameManager.getCurrentPlayer().toString()));
 		else

@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TictactoeInitializer2ApplicationTests {
+public class TictactoeApplicationTests {
 
 	@Test
 	public void contextLoads() {

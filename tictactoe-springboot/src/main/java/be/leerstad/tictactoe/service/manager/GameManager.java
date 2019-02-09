@@ -40,7 +40,8 @@ public class GameManager extends Observable {
 	
 	
 	public GameManager() {
-		board = new Board(); // allocate game-board	
+		board = new Board(); // allocate game-board
+		currentState = GameState.RESET;
 	}
 
 
