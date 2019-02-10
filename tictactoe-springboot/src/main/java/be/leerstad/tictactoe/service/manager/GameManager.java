@@ -23,7 +23,6 @@ import be.leerstad.tictactoe.service.dto.PlayerDTO;
 import be.leerstad.tictactoe.service.manager.mapper.PlayerMapper;
 @Controller
 public class GameManager extends Observable {
-	private Board board; // the game board
 	private GameMode currentGameMode;
 	private GameState currentState; // the current state of the game (of enum GameState)
 	private PlayerDTO currentPlayer; // the current player (with enum Seed)
@@ -37,10 +36,12 @@ public class GameManager extends Observable {
 	private GameMapper gameMapper;
 	@Autowired
 	private GameRepository gameRepository;
+	@Autowired
+	private Board board;
 	
 	
 	public GameManager() {
-		board = new Board(); // allocate game-board
+		//board = new Board(); // allocate game-board
 		currentState = GameState.RESET;
 	}
 
@@ -147,7 +148,7 @@ public class GameManager extends Observable {
 	}
 
 	/** Update the currentState after the player with "theSeed" has moved */
-	public void updateGame(Seed theSeed) {
+	private void updateGame(Seed theSeed) {
 		if (board.hasWon(theSeed)) { // check for win
 			currentState = (theSeed == Seed.CROSS) ? GameState.CROSS_WON : GameState.NOUGHT_WON;
 			keepScore(theSeed);
@@ -210,4 +211,12 @@ public class GameManager extends Observable {
 	return gameMapper.mapToDTO(gameRepository.findAll());
 	}
 
+	public void reset(){
+		board.init();
+		this.player1 = null;
+		this.player2 = null;
+		this.currentPlayer = null;
+		this.game = null;
+		this.currentState = GameState.RESET;
+	}
 }

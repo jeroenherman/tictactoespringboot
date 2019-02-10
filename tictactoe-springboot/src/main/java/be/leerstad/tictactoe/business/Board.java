@@ -1,8 +1,13 @@
 package be.leerstad.tictactoe.business;
 
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+
 /**
  * The Board class models the game-board.
  */
+@Component
 public class Board {  // save as Board.java
    // Named-constants for the dimensions
    public static final int ROWS = 3;
@@ -22,6 +27,7 @@ public class Board {  // save as Board.java
    }
  
    /** Initialize (or re-initialize) the contents of the game board */
+   @PostConstruct
    public void init() {
       for (int row = 0; row < ROWS; ++row) {
          for (int col = 0; col < COLS; ++col) {
@@ -60,27 +66,8 @@ public class Board {  // save as Board.java
                    && cells[1][1].content == theSeed
                    && cells[2][0].content == theSeed);
    }
- 
-   /** print itself */
-   public void paint() {
-      for (int row = 0; row < ROWS; ++row) {
-         for (int col = 0; col < COLS; ++col) {
-            cells[row][col].paint();   // each cell paints itself
-            if (col < COLS - 1) System.out.print("|");
-         }
-         System.out.println();
-         if (row < ROWS - 1) {
-            System.out.println("-----------");
-         }
-      }
-   }
-
 public Cell[][] getCells() {
 	return cells;
-}
-
-public void setCells(Cell[][] cells) {
-	this.cells = cells;
 }
 
 public int getCurrentRow() {

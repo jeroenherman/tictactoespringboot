@@ -43,4 +43,12 @@ public class Score implements Serializable {
     public void setScoreO(Integer scoreO) {
         this.scoreO = scoreO;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

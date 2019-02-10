@@ -14,7 +14,12 @@ public class CellDTO {
 		this.col = col;
 		this.seed = seed;
 	}
-	public int getRow() {
+
+    public CellDTO() {
+
+    }
+
+    public int getRow() {
 		return row;
 	}
 	public void setRow(int row) {

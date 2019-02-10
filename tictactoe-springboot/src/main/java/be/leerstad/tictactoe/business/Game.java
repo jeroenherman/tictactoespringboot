@@ -77,23 +77,6 @@ public void setDateTime(LocalDateTime dateTime) {
 		this.score = score;
 	}
 
-	@Override
-public String toString() {
-	StringBuilder builder = new StringBuilder();
-	builder.append("Game id=");
-	builder.append(id);
-	builder.append(" player1=");
-	builder.append(player1);
-	builder.append(" player2=");
-	builder.append(player2);
-	builder.append(" DateTime=");
-	builder.append(dateTime);
-	return builder.toString();
 }
 
 
-
-
-
-
-}

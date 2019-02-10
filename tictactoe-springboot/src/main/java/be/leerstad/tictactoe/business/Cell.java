@@ -7,9 +7,12 @@ public class Cell {  // save as Cell.java
   // package access
   Seed content; // content of this cell of type Seed.
                 // take a value of Seed.EMPTY, Seed.CROSS, or Seed.NOUGHT
-  int row, col; // row and column of this cell, not used in this program
+  int row, col;
+    /** test constructor **/
+    public Cell() {
+    }
 
-  /** Constructor to initialize this cell */
+    /** Constructor to initialize this cell */
   public Cell(int row, int col) {
      this.row = row;
      this.col = col;
@@ -21,12 +24,27 @@ public class Cell {  // save as Cell.java
      content = Seed.EMPTY;
   }
 
-  /** Paint itself */
-  public void paint() {
-     switch (content) {
-        case CROSS:  System.out.print(" X "); break;
-        case NOUGHT: System.out.print(" O "); break;
-        case EMPTY:  System.out.print("   "); break;
-     }
-  }
+    public Seed getContent() {
+        return content;
+    }
+
+    public void setContent(Seed content) {
+        this.content = content;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
 }

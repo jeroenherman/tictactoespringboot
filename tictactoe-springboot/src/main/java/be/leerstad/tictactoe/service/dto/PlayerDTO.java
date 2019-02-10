@@ -10,6 +10,11 @@ public class PlayerDTO {
 	public PlayerDTO(String name ) {
 		this.name =name;
 	}
+
+	public PlayerDTO() {
+
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -26,6 +31,11 @@ public class PlayerDTO {
 	public void setSeed(Seed seed) {
 		Seed = seed;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public String toString() {
 		return name;
