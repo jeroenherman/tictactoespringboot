@@ -2,8 +2,8 @@ package be.leerstad.tictactoe.service.manager.mapper;
 
 import be.leerstad.tictactoe.business.Game;
 import be.leerstad.tictactoe.business.Score;
+import be.leerstad.tictactoe.commons.AbstractMapper;
 import be.leerstad.tictactoe.service.dto.GameDTO;
-import commons.service.AbstractMapper;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,10 +1,9 @@
 package be.leerstad.tictactoe.service.manager.mapper;
 
-import org.springframework.stereotype.Component;
 
 import be.leerstad.tictactoe.business.Player;
 import be.leerstad.tictactoe.service.dto.PlayerDTO;
-import commons.service.AbstractMapper;
+import  be.leerstad.tictactoe.commons.AbstractMapper;
 import org.springframework.stereotype.Controller;
 
 @Controller

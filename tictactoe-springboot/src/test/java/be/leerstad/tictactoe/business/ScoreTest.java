@@ -32,11 +32,24 @@ public void testId() {
 @Test
 public void testScoreX() {
 	assertNull(classUnderTest.getScoreX());
+	classUnderTest.setScoreO(10);
+	assertEquals(10,classUnderTest.getScoreO(),0);
+	classUnderTest.setScoreO(20);
+	assertEquals(20,classUnderTest.getScoreO(),0);
+
+
 }
 
 @Test
 public void testScoreO() {
 	assertNull(classUnderTest.getScoreO());
+	classUnderTest.setScoreX(10);
+	assertEquals(10,classUnderTest.getScoreX(),0);
+	classUnderTest.setScoreX(20);
+	assertEquals(20,classUnderTest.getScoreX(),0);
+
 }
+
+
 
 }
