@@ -50,7 +50,7 @@ public LocalDateTime getDateTime() {
 	return dateTime;
 }
 public void setDateTime(LocalDateTime dateTime) {
-	dateTime = dateTime;
+	this.dateTime = dateTime;
 }
 
 	public String getPlayer1() {

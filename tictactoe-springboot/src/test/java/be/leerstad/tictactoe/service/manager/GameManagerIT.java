@@ -1,9 +1,11 @@
 package be.leerstad.tictactoe.service.manager;
 
+import be.leerstad.tictactoe.business.Game;
 import be.leerstad.tictactoe.business.GameState;
 import be.leerstad.tictactoe.business.Seed;
 import be.leerstad.tictactoe.service.TestConfig;
 import be.leerstad.tictactoe.service.dto.CellDTO;
+import be.leerstad.tictactoe.service.dto.GameDTO;
 import be.leerstad.tictactoe.service.dto.GameMode;
 import be.leerstad.tictactoe.service.dto.PlayerDTO;
 import org.junit.After;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
@@ -84,22 +88,50 @@ public class GameManagerIT {
     }
 
 
-
-
     @Test
-    public void setGameMode() throws Exception {
+    public void singlePlayer(){
+        gameManager.initGame(p1,p2, GameMode.SINGLE);
+        assertTrue(gameManager.getGameMode().equals(GameMode.SINGLE));
+        assertTrue(gameManager.getCurrentState().equals(GameState.PLAYING));
+        assertTrue(gameManager.getCurrentPlayer().equals(p1));
+        CellDTO cell = new CellDTO(1,1,Seed.CROSS);
+        assertEquals(gameManager.singlePlayer(cell),("Player 1 your move!"));
+        assertEquals(gameManager.singlePlayer(cell),("This move at (1,1) is not valid. Try again..."));
+        cell = new CellDTO(2,1,Seed.CROSS);
+        assertEquals(gameManager.singlePlayer(cell),("Player 1 your move!"));
+        assertEquals(gameManager.singlePlayer(cell),("This move at (2,1) is not valid. Try again..."));
+        cell = new CellDTO(3,1,Seed.CROSS);
+        assertEquals(gameManager.singlePlayer(cell),("Cross won"));
+        assertEquals(gameManager.singlePlayer(cell),("This move at (3,1) is not valid. Try again..."));
+
     }
 
-    @Test
-    public void updateGame() throws Exception {
-    }
 
     @Test
     public void newGame() throws Exception {
+        gameManager.initGame(p1,p2,GameMode.DUAL);
+        gameManager.newGame();
+        assertEquals(p1,gameManager.getCurrentPlayer());
+        assertEquals(GameState.PLAYING,gameManager.getCurrentState());
     }
 
     @Test
     public void saveGame() throws Exception {
+        assertFalse(gameManager.saveGame());
+        testDualPlayer();
+        assertTrue(gameManager.saveGame());
+        List<GameDTO> ranking = gameManager.getRanking();
+        assertEquals(1,ranking.size());
+        assertEquals(1, ranking.get(0).getScore1(),0);
+        assertEquals(0, ranking.get(0).getScore2(),0);
+
+        testDualPlayer();
+        assertTrue(gameManager.saveGame());
+        ranking = gameManager.getRanking();
+        assertEquals(1,ranking.size());
+        assertEquals(2, ranking.get(0).getScore1(),0);
+        assertEquals(0, ranking.get(0).getScore2(),0);
+
     }
 
 

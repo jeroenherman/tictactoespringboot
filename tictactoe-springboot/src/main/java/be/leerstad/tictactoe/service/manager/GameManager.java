@@ -21,202 +21,203 @@ import be.leerstad.tictactoe.service.dto.CellDTO;
 import be.leerstad.tictactoe.service.dto.GameMode;
 import be.leerstad.tictactoe.service.dto.PlayerDTO;
 import be.leerstad.tictactoe.service.manager.mapper.PlayerMapper;
+
 @Controller
 public class GameManager extends Observable {
-	private GameMode currentGameMode;
-	private GameState currentState; // the current state of the game (of enum GameState)
-	private PlayerDTO currentPlayer; // the current player (with enum Seed)
-	private PlayerDTO player1;
-	private PlayerDTO player2;
-	@Autowired
-	private Game game;
-	@Autowired
-	private PlayerMapper playerMapper;
-	@Autowired
-	private GameMapper gameMapper;
-	@Autowired
-	private GameRepository gameRepository;
-	@Autowired
-	private Board board;
-	
-	
-	public GameManager() {
-		//board = new Board(); // allocate game-board
-		currentState = GameState.RESET;
-	}
+    private GameMode currentGameMode;
+    private GameState currentState; // the current state of the game (of enum GameState)
+    private PlayerDTO currentPlayer; // the current player (with enum Seed)
+    private PlayerDTO player1;
+    private PlayerDTO player2;
+    @Autowired
+    private Game game;
+    @Autowired
+    private PlayerMapper playerMapper;
+    @Autowired
+    private GameMapper gameMapper;
+    @Autowired
+    private GameRepository gameRepository;
+    @Autowired
+    private Board board;
 
 
-	public String singlePlayer(CellDTO cellDTO) {
-		String message = "";
-		if (getCurrentPlayer().getSeed().equals(Seed.CROSS))
-			message = dualPlayer(cellDTO);
-		if (getCurrentPlayer().getSeed().equals(Seed.NOUGHT)) {
-			do {
-				int row = ThreadLocalRandom.current().nextInt(1, 4);
-				int col = ThreadLocalRandom.current().nextInt(1, 4);
-				cellDTO = new CellDTO(row, col, Seed.EMPTY);
-				message = dualPlayer(cellDTO);
-			} while (currentPlayer.getSeed().equals(Seed.NOUGHT) && currentState.equals(GameState.PLAYING));
-		}
-		return message;
-	}
-
-	public PlayerDTO getCurrentPlayer() {
-		return currentPlayer;
-	}
-
-	public GameState getCurrentState() {
-		return currentState;
-	}
-
-	public GameMode getGameMode() {
-		return currentGameMode;
-	}
-
-	/** Initialize the game-board contents and the current states */
-	public void initGame(PlayerDTO p1, PlayerDTO p2, GameMode gs) {
-		board.init(); // clear the board contents
-		setChanged();
-		setPlayers(p1,p2);
-		resetScore();
-		currentGameMode = gs;
-		notifyObservers(GameState.RESET);
-		currentPlayer = p1; // CROSS plays first
-		currentState = GameState.PLAYING; // ready to play
-
-	}
-
-	private void setPlayers(PlayerDTO p1, PlayerDTO p2) {
-		this.player1 = p1;
-		player1.setSeed(Seed.CROSS);
-		this.player2 = p2;
-		player2.setSeed(Seed.NOUGHT);
-		game = gameRepository.findGameByPlayer1AndAndPlayer2(p1.getName(),p2.getName());
-		if (game==null){
-			game = new Game();
-		}
-
-	}
-
-	private void resetScore() {
-		player1.setScore( 0);
-		player2.setScore( 0);	
-	}
-
-	public void setGameMode(GameMode gameMode) {
-		if (currentState.equals(GameState.PLAYING))
-			initGame(player1,player2, gameMode);
-		setChanged();
-		notifyObservers();
-	}
-
-	/**
-	 * The player with "theSeed" makes one move, with input validation. Update
-	 * Cell's content, Board's currentRow and currentCol.
-	 */
-	public String dualPlayer(CellDTO cellDTO) {
-		int row, col;
-		String message = "";
-		row = cellDTO.getRow() - 1; // arrays are 0 based
-		col = cellDTO.getCol() - 1; // arrays are 0 based
-		if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS && board.getSeed(row, col) == Seed.EMPTY) {
-			board.setSeed(row, col, currentPlayer.getSeed());
-			board.setCurrentRow(row);
-			board.setCurrentCol(col);
-			cellDTO.setSeed(currentPlayer.getSeed());
-			setChanged();
-			notifyObservers(cellDTO); // change cell image via cellDTO
-			updateGame(currentPlayer.getSeed());
-			message = currentState.toString();
-			if (currentState.equals(GameState.PLAYING))
-				message =  switchPlayer().toString();
-
-		} else {
-			message = "This move at (" + (row + 1) + "," + (col + 1) + ") is not valid. Try again...";
-		}
-		return message;
-	}
-
-	private Seed switchPlayer() {
-		 if (currentPlayer.equals(player1))
-				 currentPlayer = player2;
-		 else
-			 currentPlayer = player1;
-		setChanged();
-		notifyObservers();
-		return currentPlayer.getSeed();
-	}
-
-	/** Update the currentState after the player with "theSeed" has moved */
-	private void updateGame(Seed theSeed) {
-		if (board.hasWon(theSeed)) { // check for win
-			currentState = (theSeed == Seed.CROSS) ? GameState.CROSS_WON : GameState.NOUGHT_WON;
-			keepScore(theSeed);
-			setChanged();
-		} else if (board.isDraw()) { // check for draw
-			currentState = GameState.DRAW;
-			setChanged();
-		}
-		// Otherwise, no change to current state (still GameState.PLAYING).
-		notifyObservers();
-	}
+    public GameManager() {
+        //board = new Board(); // allocate game-board
+        currentState = GameState.RESET;
+    }
 
 
-	private void keepScore(Seed theSeed) {
-		if (theSeed.equals(player1.getSeed()))
-			player1.setScore(player1.getScore()+1);
-		else
-			player2.setScore(player2.getScore()+1);
-	}
+    public String singlePlayer(CellDTO cellDTO) {
+        String message = "";
+        if (getCurrentPlayer().getSeed().equals(Seed.CROSS))
+            message = dualPlayer(cellDTO);
+        if (getCurrentPlayer().getSeed().equals(Seed.NOUGHT)) {
+            do {
+                int row = ThreadLocalRandom.current().nextInt(1, 4);
+                int col = ThreadLocalRandom.current().nextInt(1, 4);
+                cellDTO = new CellDTO(row, col, Seed.EMPTY);
+                message = dualPlayer(cellDTO);
+            } while (currentPlayer.getSeed().equals(Seed.NOUGHT) && currentState.equals(GameState.PLAYING));
+        }
+        return message;
+    }
+
+    public PlayerDTO getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public GameState getCurrentState() {
+        return currentState;
+    }
+
+    public GameMode getGameMode() {
+        return currentGameMode;
+    }
+
+    /**
+     * Initialize the game-board contents and the current states
+     */
+    public void initGame(PlayerDTO p1, PlayerDTO p2, GameMode gs) {
+        board.init(); // clear the board contents
+        setChanged();
+        setPlayers(p1, p2);
+        resetScore();
+        currentGameMode = gs;
+        notifyObservers(GameState.RESET);
+        currentPlayer = p1; // CROSS plays first
+        currentState = GameState.PLAYING; // ready to play
+
+    }
+
+    private void setPlayers(PlayerDTO p1, PlayerDTO p2) {
+        this.player1 = p1;
+        player1.setSeed(Seed.CROSS);
+        this.player2 = p2;
+        player2.setSeed(Seed.NOUGHT);
+        game = gameRepository.findGameByPlayer1AndAndPlayer2(p1.getName(), p2.getName());
+        if (game == null) {
+            game = new Game();
+        }
+
+    }
+
+    private void resetScore() {
+        player1.setScore(0);
+        player2.setScore(0);
+    }
 
 
-	public void newGame() {
-		board.init(); // clear the board contents
-		setChanged();
-		notifyObservers(GameState.RESET);
-		currentPlayer = player1; // CROSS plays first
-		currentState = GameState.PLAYING; // ready to play
-	}
-	
-	public boolean saveGame() {
-		if(currentState!=GameState.PLAYING) {
-			Optional optional = gameRepository.findById(Integer.valueOf(game.getId()));
-			if (optional.isPresent()) {
-				game = (Game) optional.get();
-				game.getScore().setScoreX(game.getScore().getScoreX()+player1.getScore());
-				game.getScore().setScoreO(game.getScore().getScoreO()+player2.getScore());
-				game.setDateTime(LocalDateTime.now());
-			}
-			else
-			game = new Game(playerMapper.mapToObj(player1), playerMapper.mapToObj(player2), LocalDateTime.now());
-			game = gameRepository.save(game);
-			resetScore();
-			newGame();
-			return true;
-		}
-		return false;
-	}
+    /**
+     * The player with "theSeed" makes one move, with input validation. Update
+     * Cell's content, Board's currentRow and currentCol.
+     */
+    public String dualPlayer(CellDTO cellDTO) {
+        int row, col;
+        String message = "";
+        row = cellDTO.getRow() - 1; // arrays are 0 based
+        col = cellDTO.getCol() - 1; // arrays are 0 based
+        if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS && board.getSeed(row, col) == Seed.EMPTY) {
+            board.setSeed(row, col, currentPlayer.getSeed());
+            board.setCurrentRow(row);
+            board.setCurrentCol(col);
+            cellDTO.setSeed(currentPlayer.getSeed());
+            setChanged();
+            notifyObservers(cellDTO); // change cell image via cellDTO
+            updateGame(currentPlayer.getSeed());
+            message = currentState.toString();
+            if (currentState.equals(GameState.PLAYING))
+                message = switchPlayer().toString();
+
+        } else {
+            message = "This move at (" + (row + 1) + "," + (col + 1) + ") is not valid. Try again...";
+        }
+        return message;
+    }
+
+    private Seed switchPlayer() {
+        if (currentPlayer.equals(player1))
+            currentPlayer = player2;
+        else
+            currentPlayer = player1;
+        setChanged();
+        notifyObservers();
+        return currentPlayer.getSeed();
+    }
+
+    /**
+     * Update the currentState after the player with "theSeed" has moved
+     */
+    private void updateGame(Seed theSeed) {
+        if (board.hasWon(theSeed)) { // check for win
+            currentState = (theSeed == Seed.CROSS) ? GameState.CROSS_WON : GameState.NOUGHT_WON;
+            keepScore(theSeed);
+            setChanged();
+        } else if (board.isDraw()) { // check for draw
+            currentState = GameState.DRAW;
+            setChanged();
+        }
+        // Otherwise, no change to current state (still GameState.PLAYING).
+        notifyObservers();
+    }
 
 
-	public PlayerDTO getPlayer1() {
-		return player1;
-	}
+    private void keepScore(Seed theSeed) {
+        if (theSeed.equals(player1.getSeed()))
+            player1.setScore(player1.getScore() + 1);
+        else
+            player2.setScore(player2.getScore() + 1);
+    }
 
 
-	public PlayerDTO getPlayer2() {
-		return player2;
-	}
-	
-	public List<GameDTO> getRanking(){
-	return gameMapper.mapToDTO(gameRepository.findAll());
-	}
+    public void newGame() {
+        board.init(); // clear the board contents
+        setChanged();
+        notifyObservers(GameState.RESET);
+        currentPlayer = player1; // CROSS plays first
+        currentState = GameState.PLAYING; // ready to play
+    }
 
-	public void reset(){
-		board.init();
-		this.player1 = null;
-		this.player2 = null;
-		this.currentPlayer = null;
-		this.game = null;
-		this.currentState = GameState.RESET;
-	}
+    public boolean saveGame() {
+        if (player1 == null || player2 == null)
+            return false;
+        if (currentState != GameState.PLAYING) {
+            Optional<Game> optional = gameRepository.findById(Integer.valueOf(game.getId()));
+            if (optional.isPresent()) {
+                game = optional.get();
+                game.getScore().setScoreX(game.getScore().getScoreX() + player1.getScore());
+                game.getScore().setScoreO(game.getScore().getScoreO() + player2.getScore());
+                game.setDateTime(LocalDateTime.now());
+            } else {
+                game = new Game(playerMapper.mapToObj(player1), playerMapper.mapToObj(player2), LocalDateTime.now());
+            }
+            game = gameRepository.save(game);
+            resetScore();
+            newGame();
+            return true;
+        }
+        return false;
+    }
+
+
+    public PlayerDTO getPlayer1() {
+        return player1;
+    }
+
+
+    public PlayerDTO getPlayer2() {
+        return player2;
+    }
+
+    public List<GameDTO> getRanking() {
+        return gameMapper.mapToDTO(gameRepository.findAll());
+    }
+
+    public void reset() {
+        board.init();
+        this.player1 = null;
+        this.player2 = null;
+        this.currentPlayer = null;
+        this.game = null;
+        this.currentState = GameState.RESET;
+    }
 }
